@@ -115,6 +115,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\VY04\VY04\CVector.h" />
+    <ClInclude Include="..\..\..\VY04\VY04\CVectorFunctors.h" />
+    <ClInclude Include="..\..\..\VY04\VY04\CVectorImp.h" />
+    <ClInclude Include="..\..\..\VY04\VY04\CVectorTypedef.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
