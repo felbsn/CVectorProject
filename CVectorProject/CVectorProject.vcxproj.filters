@@ -15,22 +15,31 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\VY04\VY04\CVectorFunctors.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\VY04\VY04\CVectorImp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\VY04\VY04\CVectorTypedef.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\VY04\VY04\CVector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CVector\CVectorFunctors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CVector\CVectorImp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CVector\CVectorTypedef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CVector\CVector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CStack\CStackTypedef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CStack\CStack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CStack\CStackImp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
