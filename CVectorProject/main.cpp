@@ -25,15 +25,26 @@ int main(int argc, char ** argv)
 	StackPush(stack, 5);
 
 	VectorAppend(vec, 30);
+	VectorAppend(vec, 11);
+	VectorAppend(vec, 47);
+	VectorAppend(vec, 11);
 	VectorAppend(vec, 13);
-	VectorAppend(vec, 3434);
+	VectorAppend(vec, 11);
 
-	VectorAppend(vec, 23);
-
+	VectorAppend(vec, 143);
+	VectorAppend(vec, 58);
 
 	for (size_t i = 0; i < vec.size; i++)
 	{
-		printf("%5d ", vec.data[i]);
+		printf("(%d) %5d\n",i , vec.data[i]);
+	}
+
+	VectorTrim(vec, 11);
+	printf("after printing \n");
+
+	for (size_t i = 0; i < vec.size; i++)
+	{
+		printf("(%d) %5d\n", i, vec.data[i]);
 	}
 
  

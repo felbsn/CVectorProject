@@ -141,12 +141,51 @@ else\
 #define VectorDelete(vec , index )\
 	{\
     int i;\
-    for( i = (vec).size-1;  i > index   ; i--){\
-      (vec).data[i-1] = (vec).data[i];\
-    }\
-    (vec).size--;\
+	for (i = index; i < vec.size-1; i++) {\
+	(vec).data[i] = (vec).data[i + 1];\
+	}\
+	(vec).size--;\
   }
 
+
+
+
+#define VectorTrim(vec , val)\
+	{\
+		int i, j = 0;\
+		while (j < (vec).size && (vec).data[j] != val) { j++; }\
+		if (j < (vec).size)\
+		{\
+			int passCount = 1;\
+			for (i = j; (i + passCount)< vec.size; i++) {\
+				int k = passCount + i;\
+				while (k < vec.size - 1 && (vec).data[k] == val)\
+				{\
+					k++;\
+					passCount++;\
+				}\
+				(vec).data[i] = (vec).data[k];\
+			}\
+			if((vec).data[(vec).size-1] == val )\
+			(vec).size--;   \
+			(vec).size -= passCount; \
+		}\
+	}\
+
+
+/*#define VectorDeleteAllMatchs(vec , val )\
+	{\
+    int i , j;\
+	for(j = 0; j  < (vec).size ; j++)
+	{
+	}
+    for( i = (vec).size-1;  i > index   ; i--){\
+      (vec).data[i-1] = (vec).data[i];\
+    }
+	}
+    (vec).size--;\
+  }
+  */
 #define VectorReserve( vec,newSize){\
       if(newSize > (vec).size) \
       { \
