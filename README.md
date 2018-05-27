@@ -21,7 +21,7 @@ typedef struct <br>
   YourDataType * data;<br>
 } MyDaTaVector;<br>
 <br>
-all you need to do write you vector data.
+all you need to do write your vector data structure.
 after you can easily use all vector functions in your own defined data type
 
 ex:
