@@ -14,13 +14,13 @@ decltype didnt works as i expect. So i figure out static_cas<delctype(x)> as a s
 
 <h2>Simple Structure</h2>
 
-typedef struct 
-{
-  int size;
-  int capacity;
-  YourDataType * data;
-} MyDaTaVector;
-
+typedef struct <br>
+{<br>
+  int size;<br>
+  int capacity;<br>
+  YourDataType * data;<br>
+} MyDaTaVector;<br>
+<br>
 all you need to do write you vector data.
 after you can easily use all vector functions in your own defined data type
 
