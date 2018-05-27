@@ -12,7 +12,7 @@ in gcc has typeof specifier already so you can build *.c files without any probl
 Where as it does not works with msvc compiler. Msvc dont have 'typeof' specifier where as my implement depends on a type specifier and 
 decltype didnt works as i expect. So i figure out static_cas<delctype(x)> as a solution. 
 
-<h2>Simple Structure<h2>
+<h2>Simple Structure</h2>
 
 typedef struct 
 {
