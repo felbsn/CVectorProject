@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="CVector">
+      <UniqueIdentifier>{32c30624-23de-4c8f-83ed-a580a86d032e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CStack">
+      <UniqueIdentifier>{b7278645-ccb1-44a9-b324-94401ce3a6d2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -20,26 +26,26 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CVector\CVector.h">
+      <Filter>CVector</Filter>
+    </ClInclude>
     <ClInclude Include="CVector\CVectorFunctors.h">
-      <Filter>Header Files</Filter>
+      <Filter>CVector</Filter>
     </ClInclude>
     <ClInclude Include="CVector\CVectorImp.h">
-      <Filter>Header Files</Filter>
+      <Filter>CVector</Filter>
     </ClInclude>
     <ClInclude Include="CVector\CVectorTypedef.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CVector\CVector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CStack\CStackTypedef.h">
-      <Filter>Header Files</Filter>
+      <Filter>CVector</Filter>
     </ClInclude>
     <ClInclude Include="CStack\CStack.h">
-      <Filter>Header Files</Filter>
+      <Filter>CStack</Filter>
     </ClInclude>
     <ClInclude Include="CStack\CStackImp.h">
-      <Filter>Header Files</Filter>
+      <Filter>CStack</Filter>
+    </ClInclude>
+    <ClInclude Include="CStack\CStackTypedef.h">
+      <Filter>CStack</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

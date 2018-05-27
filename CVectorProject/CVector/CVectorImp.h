@@ -172,20 +172,23 @@ else\
 		}\
 	}\
 
-
-/*#define VectorDeleteAllMatchs(vec , val )\
+#define VectorAppendVec( vec ,  vecOther)\
+{\
+	if ((vec).capacity - (vecOther).size < 0)\
 	{\
-    int i , j;\
-	for(j = 0; j  < (vec).size ; j++)
-	{
-	}
-    for( i = (vec).size-1;  i > index   ; i--){\
-      (vec).data[i-1] = (vec).data[i];\
-    }
-	}
-    (vec).size--;\
-  }
-  */
+		(vec).capacity += (vecOther).size; \
+		(vec).data = TYPE_OF((vec).data) (realloc((vec).data, (sizeof(*(vec).data))*(vec).capacity)); \
+	}\
+	int  i , j = (vec).size;\
+	for ( i = 0; i < (vecOther).size; i++)\
+	{\
+		(vec).data[j] = (vecOther).data[i];\
+		j++;\
+	}\
+(vec).size +=(vecOther).size; \
+}\
+
+
 #define VectorReserve( vec,newSize){\
       if(newSize > (vec).size) \
       { \

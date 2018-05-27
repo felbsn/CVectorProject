@@ -25,6 +25,14 @@ typedef struct CVectorInt2_s
 }  CVectorInt2;
 
 
+typedef struct CVectorChar_s
+{
+	int size;
+	int capacity;
+	char *data;
+}  CVectorChar;
+
+
 
 
 
