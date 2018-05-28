@@ -5,7 +5,7 @@
 
 #include "CVector/CVector.h"
 #include "CStack/CStack.h"
-#include "ColorConsole.h"
+#include "../Utilities/ColorConsole.h"
 
 
 #define isNumber(a)  ((a >= '0') && (a <= '9'))

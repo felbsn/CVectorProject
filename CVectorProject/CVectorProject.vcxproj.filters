@@ -19,6 +19,12 @@
     <Filter Include="CStack">
       <UniqueIdentifier>{b7278645-ccb1-44a9-b324-94401ce3a6d2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Examples">
+      <UniqueIdentifier>{c5653942-ffca-42d2-ad39-255e1d91d30b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{381a167e-4387-43d8-a5b4-5ca69246e15d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -47,14 +53,14 @@
     <ClInclude Include="CStack\CStackTypedef.h">
       <Filter>CStack</Filter>
     </ClInclude>
-    <ClInclude Include="FunctionSolver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CVector\CVectorUtils.h">
       <Filter>CVector</Filter>
     </ClInclude>
-    <ClInclude Include="ColorConsole.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Utilities\ColorConsole.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Examples\FunctionSolver.h">
+      <Filter>Examples</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

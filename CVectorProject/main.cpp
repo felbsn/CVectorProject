@@ -2,7 +2,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "FunctionSolver.h"
+#include "Examples/FunctionSolver.h"
 
 int main(int argc, char ** argv)
 {
