@@ -39,7 +39,12 @@ typedef struct CVectorChar_s
 	char *data;
 }  CVectorChar;
 
-
+typedef struct CVectorConstString_s
+{
+	int size;
+	int capacity;
+	const char** data;
+} CVectorConstString;
 
 
 

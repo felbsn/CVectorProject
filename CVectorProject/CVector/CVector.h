@@ -4,8 +4,7 @@
 
 #include "CVectorImp.h"
 #include "CVectorTypedef.h"
-
-
+#include "CVectorUtils.h"
 
 
 

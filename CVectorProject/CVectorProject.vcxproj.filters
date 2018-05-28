@@ -47,5 +47,14 @@
     <ClInclude Include="CStack\CStackTypedef.h">
       <Filter>CStack</Filter>
     </ClInclude>
+    <ClInclude Include="FunctionSolver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CVector\CVectorUtils.h">
+      <Filter>CVector</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorConsole.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
