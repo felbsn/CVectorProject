@@ -388,7 +388,7 @@ void printWelcome()
 	printf("Stack-Function Solver \n");
 	setColors(C_GREEN, CB_BLACK);
 
-	printf("\n Welcome the simple funciton solver - imlemented with using stack approach. \n You can use this command line like a aritmetic calculator \n plus you can define your own variables too. \n\n ");
+	printf("\n Welcome the simple funciton solver - implemented with using stack approach. \n You can use this command line like a aritmetic calculator \n plus you can define your own variables too. \n\n ");
 	printf("Here some embedded commands;\n");
 	setColor(C_CYAN);
 	printf("-> clear:   clear  screen\n");
