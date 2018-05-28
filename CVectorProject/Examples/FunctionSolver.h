@@ -356,8 +356,8 @@ int SolveFunction( CStackElement postFix , float *out)
 				}
 				lhE.var->value = b;
 
-				 if(postFixIndex-1 < postFix.size && 
-					 postFix.data[postFixIndex + 1].type == Operator || postFix.data[postFixIndex + 1].type == Variable)
+				 if(postFixIndex+2 < postFix.size && 
+					 postFix.data[postFixIndex + 1].type == Operator && postFix.data[postFixIndex + 2].type == Variable)
 				StackPush(stack, ElementImmediate(b));
 
 				flag++;
