@@ -18,7 +18,7 @@
 #define StackInit(stack)\
 (stack).size = 0; \
 (stack).capacity = 2; \
-(stack).data = TYPE_OF((vec).data)(malloc(sizeof(*(stack).data) * 2));
+(stack).data = TYPE_OF((stack).data)(malloc(sizeof(*(stack).data) * 2));
 
 
 #define StackFree(stack)\
@@ -33,6 +33,7 @@
       (stack).size = 0;\
     }
 
+#define StackTop(stack) (stack).data[(stack).size-1]
 
 #define StackPush(stack , val){\
 if ((stack).size >= (stack).capacity) {\
@@ -43,7 +44,11 @@ if ((stack).size >= (stack).capacity) {\
 (stack).size++;\
 }
 
-#define StackPop(stack , valPtr){\
+
+#define StackPop(stack) (stack).data[--(stack).size]
+
+
+#define StackPop_(stack , valPtr){\
 if((stack).size > 0)\
 {\
 	(stack).size--;\

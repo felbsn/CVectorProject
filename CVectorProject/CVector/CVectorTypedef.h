@@ -25,6 +25,13 @@ typedef struct CVectorInt2_s
 }  CVectorInt2;
 
 
+typedef struct CVectorFloat_s
+{
+	int size;
+	int capacity;
+	float *data;
+}  CVectorFloat;
+
 typedef struct CVectorChar_s
 {
 	int size;
@@ -32,7 +39,12 @@ typedef struct CVectorChar_s
 	char *data;
 }  CVectorChar;
 
-
+typedef struct CVectorConstString_s
+{
+	int size;
+	int capacity;
+	const char** data;
+} CVectorConstString;
 
 
 

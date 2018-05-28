@@ -118,6 +118,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ColorConsole.h" />
     <ClInclude Include="CStack\CStack.h" />
     <ClInclude Include="CStack\CStackImp.h" />
     <ClInclude Include="CStack\CStackTypedef.h" />
@@ -125,6 +126,8 @@
     <ClInclude Include="CVector\CVectorFunctors.h" />
     <ClInclude Include="CVector\CVectorImp.h" />
     <ClInclude Include="CVector\CVectorTypedef.h" />
+    <ClInclude Include="CVector\CVectorUtils.h" />
+    <ClInclude Include="FunctionSolver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

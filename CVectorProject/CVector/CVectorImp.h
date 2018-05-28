@@ -33,6 +33,10 @@
       vec.size = 0;\
     }
 
+#define VectorContains(vec ,  val, comparator)\
+{\
+\
+}
 
 #define VectorAppend(vec , val){\
 if ((vec).size >= (vec).capacity) {\
@@ -43,10 +47,28 @@ if ((vec).size >= (vec).capacity) {\
 (vec).size++;\
 }
 
+#define VectorInsert( vec,  val, comparator) {\
+if ((vec).size >= (vec).capacity) {\
+			\
+				(vec).capacity *= (int)((vec).capacity*1.5f); \
+				(vec).data = TYPE_OF((vec).data) (realloc((vec).data, (sizeof(*(vec).data))*(vec).capacity)); \
+		}\
+			int i = 0;\
+			while (i < (vec).size && comparator( val , (vec).data[i]) >= 0) { i++; }\
+			\
+			int j; \
+			for (j = (vec).size; j > i; j--)\
+			{\
+				(vec).data[j] = (vec).data[j - 1];\
+			}\
+			(vec).size++;\
+			(vec).data[i] = val;\
+}
+
 
 #define VectorSort(vec  , functor )\
 do{\
-     int i = 0;\
+     int i;\
       for (i = 0; i < (vec).size; i++){\
       TYPE_VAR(*(vec).data) cur = (vec).data[i];\
        int j = i-1;\
@@ -73,7 +95,7 @@ do{\
 
 
 
-#define VectorBinarySearch(vec , value,comparator, retIndex)\
+#define VectorBinarySearch(vec , value, retIndex , comparator)\
 { \
 	int left = 0 , right = (vec).size - 1; \
 	int curIndex; \
@@ -157,7 +179,7 @@ else\
 		if (j < (vec).size)\
 		{\
 			int passCount = 1;\
-			for (i = j; (i + passCount)< vec.size; i++) {\
+			for (i = j; i< vec.size; i++) {\
 				int k = passCount + i;\
 				while (k < vec.size - 1 && (vec).data[k] == val)\
 				{\
@@ -188,11 +210,10 @@ else\
 (vec).size +=(vecOther).size; \
 }\
 
-
 #define VectorReserve( vec,newSize){\
       if(newSize > (vec).size) \
       { \
-        (vec).data = typeof((vec).data) (realloc((vec).data ,newSize*sizeof(*(vec).data))); \
+        (vec).data = TYPE_OF((vec).data) (realloc((vec).data ,newSize*sizeof(*(vec).data))); \
         (vec).capacity = newSize; \
       } \
     }
