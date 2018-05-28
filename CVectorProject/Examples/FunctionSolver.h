@@ -15,6 +15,7 @@
 enum Process
 {
 	undefined,
+	semicolon,
 	equality,
 	lhBracked,
 	addProc,
@@ -23,7 +24,6 @@ enum Process
 	mulProc,
 	powProc,
 	rhBracked
-
 };
 
 char ProcToChar(Process proc)
@@ -42,6 +42,8 @@ char ProcToChar(Process proc)
 		return '=';
 	case powProc:
 		return '^';
+	case semicolon:
+		return ';';
 	default:
 		return '?';
 	}
@@ -67,6 +69,8 @@ Process CharToProc(char c)
 		return Process::equality;
 	case '^':
 		return Process::powProc;
+	case ';':
+		return Process::semicolon;
 	default:
 		return Process::undefined;
 	}
@@ -148,7 +152,6 @@ void PrintElement(Element e)
 		printf("Error");
 		break;
 	}
-
 }
 
 typedef struct
@@ -157,10 +160,6 @@ typedef struct
 	int capacity;
 	Element *data;
 } CStackElement;
-
-
-
-
 
 int ParseInt(char* str)
 {
@@ -248,26 +247,6 @@ typedef struct
 	VariablePair * data;
 } CVectorVariable;
 
-VariablePair newVariablePair(const char *str , float val)
-{
-	VariablePair vp;
-	vp.str = str;
-	vp.valAddr = (float*)malloc(sizeof(float));
-	*vp.valAddr = val;
-	return vp;
-}
-VariablePair searchVariablePair(const char *str)
-{
-	VariablePair vp;
-	vp.str = str;
-	return vp;
-}
-
-int VariablePairCmp(VariablePair lhs , VariablePair rhs)
-{
-	return strcmp(lhs.str, rhs.str);
-}
-
 int elementcmp(Element lhs, Element rhs)
 {
 	char* s0, *s1;
@@ -296,14 +275,12 @@ int elementcmp_n(  char* otherName , Element lhs)
 	return *s0 - *s1;
 }
 
-
 typedef struct
 {
 	int size;
 	int capacity;
 	Element *data;
 } CVectorElement;
-
 
 int SolveFunction( CStackElement postFix , float *out)
 {
@@ -356,9 +333,9 @@ int SolveFunction( CStackElement postFix , float *out)
 				}
 				lhE.var->value = b;
 
-				 if(postFixIndex+2 < postFix.size && 
-					 postFix.data[postFixIndex + 1].type == Operator && postFix.data[postFixIndex + 2].type == Variable)
-				StackPush(stack, ElementImmediate(b));
+				 if(postFixIndex+1 < postFix.size && 
+				 postFix.data[postFixIndex + 1].type == Operator && postFix.data[postFixIndex+1].proc == equality)
+				 StackPush(stack, ElementImmediate(b));
 
 				flag++;
 
@@ -380,6 +357,10 @@ int SolveFunction( CStackElement postFix , float *out)
 					break;
 				case powProc:
 					res = pow(a, b);
+					break;
+				case semicolon:
+					StackClear(stack);
+					res = 0;
 					break;
 				default:
 					res = b;
