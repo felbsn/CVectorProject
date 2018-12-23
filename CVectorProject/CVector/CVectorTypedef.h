@@ -3,6 +3,7 @@
 #define CVECTORTYPEDEF_H
 
 
+
 typedef struct int2_s
 {
 	int x;

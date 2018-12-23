@@ -15,28 +15,47 @@
 #define TYPE_VAR(a) typeof(a)
 #endif // _MSC_VER
 
+#define CVectorCreateType(TYPE ,NAME)\
+typedef struct\
+{\
+	int size;\
+	int capacity;\
+	TYPE *data;\
+\
+} NAME;
+
 #define VectorInit(vec)\
 (vec).size = 0; \
 (vec).capacity = 2; \
 (vec).data = TYPE_OF((vec).data)(malloc(sizeof(*(vec).data) * 2));
 
+#define VectorCreate(vec)\
+{0 ,2 ,  TYPE_OF((vec).data)(malloc(sizeof(*(vec).data) * 2)) } 
 
 #define VectorFree(vec)\
     {\
       vec.size = 0;\
       vec.capacity = 0;\
-      free(vec.data);\
+      if(vec.data)free(vec.data);\
     }
+
+#define VectorInitAs(vec , beginSize){\
+int _beginSize = beginSize >= 2 ? beginSize : 2;\
+(vec).size = 0; \
+(vec).capacity = _beginSize; \
+(vec).data = TYPE_OF((vec).data)(malloc(sizeof(*(vec).data) * _beginSize));\
+}
+
+#define Get(x) data[x]
 
 #define VectorClear(vec)\
     {\
       vec.size = 0;\
     }
+#define VectorTop(vec) (vec).data[vec.size-1]
 
-#define VectorContains(vec ,  val, comparator)\
-{\
-\
-}
+#define VectorPop(vec) (vec).data[(vec).size -= 1]
+
 
 #define VectorAppend(vec , val){\
 if ((vec).size >= (vec).capacity) {\
@@ -47,22 +66,22 @@ if ((vec).size >= (vec).capacity) {\
 (vec).size++;\
 }
 
-#define VectorInsert( vec,  val, comparator) {\
+#define VectorInsert( vec,  value, comparator) {\
 if ((vec).size >= (vec).capacity) {\
 			\
 				(vec).capacity *= (int)((vec).capacity*1.5f); \
 				(vec).data = TYPE_OF((vec).data) (realloc((vec).data, (sizeof(*(vec).data))*(vec).capacity)); \
 		}\
-			int i = 0;\
-			while (i < (vec).size && comparator( val , (vec).data[i]) >= 0) { i++; }\
-			\
-			int j; \
-			for (j = (vec).size; j > i; j--)\
+			TYPE_VAR(*(vec).data) val = value;\
+			int _i = 0;\
+			while (_i < (vec).size && comparator( val , (vec).data[_i]) == 0) { _i++; }\
+			int _j; \
+			for (_j = (vec).size; _j > _i; _j--)\
 			{\
-				(vec).data[j] = (vec).data[j - 1];\
+				(vec).data[_j] = (vec).data[_j - 1];\
 			}\
 			(vec).size++;\
-			(vec).data[i] = val;\
+			(vec).data[_i] = val;\
 }
 
 
@@ -72,7 +91,7 @@ do{\
       for (i = 0; i < (vec).size; i++){\
       TYPE_VAR(*(vec).data) cur = (vec).data[i];\
        int j = i-1;\
-       while (j >= 0 && (functor((vec).data[j] ,cur) ) > 0) \
+       while (j >= 0 && (functor((vec).data[j] ,cur) ) <= 0) \
        {\
            (vec).data[j+1] = (vec).data[j];\
            j = j-1;\
@@ -155,6 +174,25 @@ else\
 					 retIndex = -1;\
 }
 
+
+#define VectorContainsF(vec ,  val, comparator, out)\
+{int _i = 0;\
+out = 0;\
+while( _i < (vec).size && out == 0 ){\
+out = comp((vec).data[_i] , val); _i++;}\
+}
+
+#define VectorContains(vec , val, out)\
+{int _i = 0;\
+out = 0;\
+while( _i < (vec).size && out == 0 ){\
+if((vec).data[_i] == val) out++; \
+_i++;}\
+}
+
+
+
+
 #define VectorDeleteFS(vec , index )({ \
 (vec).data[index] = (vec).data[(vec).size - 1]; \
 (vec).size--; }) \
@@ -169,7 +207,19 @@ else\
 	(vec).size--;\
   }
 
+#define VectorDeleteF(vec , index  ,destructor)\
+	{\
+    int i;\
+	for (i = index; i < vec.size-1; i++) {\
+	(vec).data[i] = (vec).data[i + 1];\
+	}\
+	(vec).size--;\
+  }
 
+#define VectorEnquene(vec) \
+	(vec).data[0];\
+	VectorDelete(vec , 0);
+ 
 
 
 #define VectorTrim(vec , val)\
@@ -223,8 +273,8 @@ else\
       { \
         (vec).data = TYPE_OF((vec).data) (realloc((vec).data ,newSize*sizeof(*(vec).data))); \
         (vec).capacity = newSize; \
-        (vec).size = newSize;\
       } \
+	  if(newSize >= 0) (vec).size = newSize;	\
     }
 
 
@@ -242,6 +292,15 @@ else\
       (vec).data = TYPE_OF((vec).data)(realloc((vec).data ,sizeof(*(vec).data)* (vec).capacity));\
     }\
   }
+
+
+#define VectorClone(vec , out)\
+{\
+VectorInitAs(out ,(vec).size);\
+(out).size = (vec).size;\
+memcpy( (out).data , (vec).data , sizeof((*(vec).data) * (vec).size ));\
+}
+
 
 
 

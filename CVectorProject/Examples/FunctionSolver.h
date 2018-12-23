@@ -3,8 +3,8 @@
 #include <string.h>
 #include <math.h>
 
-#include "CVector/CVector.h"
-#include "CStack/CStack.h"
+#include "../CVector/CVector.h"
+#include "../CStack/CStack.h"
 #include "../Utilities/ColorConsole.h"
 
 
@@ -25,6 +25,7 @@ enum Process
 	powProc,
 	rhBracked
 };
+typedef enum Process Process;
 
 char ProcToChar(Process proc)
 {
@@ -54,25 +55,25 @@ Process CharToProc(char c)
 	switch (c)
 	{
 	case '+':
-		return Process::addProc;
+		return addProc;
 	case '-':
-		return Process::subProc;
+		return subProc;
 	case '*':
-		return Process::mulProc;
+		return mulProc;
 	case '/':
-		return Process::divProc;
+		return divProc;
 	case '(':
-		return Process::lhBracked;
+		return lhBracked;
 	case ')':
-		return Process::rhBracked;
+		return rhBracked;
 	case '=':
-		return Process::equality;
+		return equality;
 	case '^':
-		return Process::powProc;
+		return powProc;
 	case ';':
-		return Process::semicolon;
+		return semicolon;
 	default:
-		return Process::undefined;
+		return undefined;
 	}
 }
 
@@ -104,10 +105,10 @@ struct Element_s
 };
 typedef struct Element_s Element;
 
-Element ElementVariable(char* name ,float val)
+Element ElementVariable(char* name, float val)
 {
 	Element e;
-	e.type = ItemType::Variable;
+	e.type = Variable;
 	e.var = (VarPtr)malloc(sizeof(VarStruct));
 	e.var->value = val;
 	e.var->name = name;
@@ -116,23 +117,23 @@ Element ElementVariable(char* name ,float val)
 Element ElementImmediate(float val)
 {
 	Element e;
-	e.type = ItemType::Immediate;
+	e.type = Immediate;
 	e.value = val;
 	return  e;
 }
 Element ElementOperator(enum Process proc)
 {
 	Element e;
-	e.type = ItemType::Operator;
+	e.type = Operator;
 	e.proc = proc;
 	return  e;
 }
 
 float ElementGetValue(Element e)
 {
-	if (e.type == ItemType::Operator) return 0;
-	 else
-	 return e.type == ItemType::Variable ? e.var->value : e.value;
+	if (e.type == Operator) return 0;
+	else
+		return e.type == Variable ? e.var->value : e.value;
 }
 
 void PrintElement(Element e)
@@ -140,7 +141,7 @@ void PrintElement(Element e)
 	switch (e.type)
 	{
 	case Variable:
- 		printf("[%s->%.1f]",e.var->name,  e.var->value);
+		printf("[%s->%.1f]", e.var->name, e.var->value);
 		break;
 	case Immediate:
 		printf("(%.1f)", e.value);
@@ -173,7 +174,7 @@ int ParseInt(char* str)
 	return val;
 }
 
-int ParseString(char* str,  char** outStr,int maxLen)
+int ParseString(const char* str, char** outStr, int maxLen)
 {
 	char* buffer = (char*)malloc(maxLen * sizeof(char));
 	int index = 0;;
@@ -187,7 +188,7 @@ int ParseString(char* str,  char** outStr,int maxLen)
 	return  index;
 }
 
-int ParseFloat(char* str, float *outValue)
+int ParseFloat(const char* str, float *outValue)
 {
 	float val = 0;
 	int advance = 0;
@@ -225,7 +226,7 @@ void printStack(const char* name, CStackElement stack)
 	setColor(C_WHITE);
 	printf(" %s : ", name);
 	int i;
-	for ( i = 0; i < stack.size; i++)
+	for (i = 0; i < stack.size; i++)
 	{
 		PrintElement(stack.data[i]);
 		printf(" ");
@@ -261,7 +262,7 @@ int elementcmp(Element lhs, Element rhs)
 	return *s0 - *s1;
 }
 
-int elementcmp_n(  char* otherName , Element lhs)
+int elementcmp_n(char* otherName, Element lhs)
 {
 	char* s0, *s1;
 	s0 = otherName;
@@ -282,15 +283,43 @@ typedef struct
 	Element *data;
 } CVectorElement;
 
-int SolveFunction( CStackElement postFix , float *out)
+
+// element definitions
+
+
+CStackElement stack;
+CStackElement postFix;
+
+CVectorElement elements;
+
+
+// funcion definitions
+
+int SolveFromInput(const char * path)
 {
-	if(postFix.size > 1)
-	printStack("PostFix", postFix);
+	FILE  * fi = fopen(path, "r");
+
+	if (fi == 0)
+	{
+		printf("! Unable to open file\n");
+		return 0;
+	}
+
+
+
+
+
+}
+
+
+int SolveFunction(CStackElement postFix, float *out)
+{
+	if (postFix.size > 1)
+		printStack("PostFix", postFix);
 	int flag = 1;
 
-	CStackElement stack;
-	VectorInit(stack);
-	//initial control 
+	VectorClear(stack);
+	//initial control
 	if (postFix.data[0].type == Operator || postFix.size == 2)
 	{
 		setColor(C_RED);
@@ -311,6 +340,16 @@ int SolveFunction( CStackElement postFix , float *out)
 			break;
 		case Operator:
 		{
+			if (e.proc == semicolon)
+				break;
+
+			if (StackIsEmpty(stack))
+			{
+				setColor(C_RED);
+				printf("! stack is empty \n");
+				return 0;
+			}
+
 			Element rhE = StackPop(stack);
 			Element lhE = StackPop(stack);
 			if (rhE.type == Operator || lhE.type == Operator)
@@ -333,14 +372,15 @@ int SolveFunction( CStackElement postFix , float *out)
 				}
 				lhE.var->value = b;
 
-				 if(postFixIndex+1 < postFix.size && 
-				 postFix.data[postFixIndex + 1].type == Operator && postFix.data[postFixIndex+1].proc == equality)
-				 StackPush(stack, ElementImmediate(b));
+				if (postFixIndex + 1 < postFix.size &&
+					postFix.data[postFixIndex + 1].type == Operator && postFix.data[postFixIndex + 1].proc == equality)
+					StackPush(stack, ElementImmediate(b));
 
 				flag++;
 
-			}else
-			{ 
+			}
+			else
+			{
 				switch (e.proc)
 				{
 				case addProc:
@@ -357,10 +397,6 @@ int SolveFunction( CStackElement postFix , float *out)
 					break;
 				case powProc:
 					res = pow(a, b);
-					break;
-				case semicolon:
-					StackClear(stack);
-					res = 0;
 					break;
 				default:
 					res = b;
@@ -402,165 +438,117 @@ void printWelcome()
 	setColor(CB_BLACK);
 }
 
-int ParseFunction()
+int ParseFunction(const char * str)
 {
+	VectorClear(postFix);
+	VectorClear(stack);
 
-	printWelcome();
+	const char* buffer = str;
 
-	CStackElement stack;
-	CStackElement postFix;
-
-	CVectorElement elements;
-	CVectorChar bufferVec;
-
-	StackInit(stack);
-	StackInit(postFix);
-
-	VectorInit(elements);
-	VectorInit(bufferVec);
-
-
-
-	
-	while(1)
-	{ 
-	
-	StackClear(postFix);
-	setColor(C_CYAN);
-	// get input string
-	VectorGetLine(&bufferVec , 255);
-
-	// here try to cath some functions such as clear and reset
-	if (strcmp(bufferVec.data, "clear") == 0)
-	{
-		clear();
-		continue;
-	}else
-		if (strcmp(bufferVec.data, "reset") == 0)
-		{
-			VectorClear(elements);
-			continue;
-		}else
-			if (strcmp(bufferVec.data, "show") == 0)
-			{
-				int i;
-				for ( i = 0; i < elements.size; i++)
-				{
-					printf(" ");
-					setColors(CB_MAGENTA, C_WHITE);
-					int elm = printf("{%s}", elements.data[i].var->name);
-					setColors(C_WHITE, CB_BLACK);
-					// some padding 
-					while (20 - elm > 0) { elm++; printf("-"); }
-					printf("-> ");
-					setColor(C_GREEN);
-					printf("%.3f \n", elements.data[i].var->value);
-				}
-
-				continue;
-			}else
-				if (strcmp(bufferVec.data, "help") == 0)
-				{
-					printWelcome();
-					continue;
-				}else
-					if (strcmp(bufferVec.data, "exit") == 0)
-					{
-						exit(0);
-					}
-
-	// not necessary atm
-	// trim all spaces in input string 
-	//VectorTrim(bufferVec, ' ');
-	
-
-	char* buffer = bufferVec.data;
-	int len = bufferVec.size;
+	int len = strlen(str);
 	int index = 0;
-	
+	int br = 0;
+
 	while (index < len)
 	{
-		if(buffer[index] == ' ')
+		if (buffer[index] == ' ')
 		{
 			//skip spaces
 			index++;
-		}else
-		if (isNumber(buffer[index]))
-		{
-			float val;
-			int advance = ParseFloat(&buffer[index], &val);
-			StackPush(postFix, ElementImmediate(val));
-			index += advance;
-
 		}
 		else
-			if (isCharacter(buffer[index]))
+			if (isNumber(buffer[index]))
 			{
-
-				char* outstr;
-				int advance = ParseString(&buffer[index], &outstr, 30);
-
-				int ret;
-				VectorBinarySearch(elements, outstr, ret, elementcmp_n);
-
-				Element e;
-				if (ret >= 0)
-				{
-					e = elements.data[ret];
-				}
-				else
-				{
-					e = ElementVariable(outstr, 0);
-					VectorInsert(elements, e, elementcmp);
-					
-				}
-				StackPush(postFix, e);
+				float val;
+				int advance = ParseFloat(&buffer[index], &val);
+				StackPush(postFix, ElementImmediate(val));
 				index += advance;
+
 			}
 			else
-			{
-				// if char is a process symbol
-
-
-				char c = buffer[index];
-				Process proc = CharToProc(c);
-				if (proc == undefined)
+				if (isCharacter(buffer[index]))
 				{
-					//abort the decoding proces
-					setColor(C_RED);
-					printf("! unable to solve funcion\n");
-					StackClear(postFix);
-					StackClear(stack);
-					break;
-				}
-				if (proc == rhBracked)
-				{
-					Element e = StackPop(stack);
 
-					while (e.type != ItemType::Operator || e.proc != lhBracked)//||  
+					char* outstr;
+					int advance = ParseString(&buffer[index], &outstr, 30);
+
+					int ret;
+					VectorBinarySearch(elements, outstr, ret, elementcmp_n);
+
+					Element e;
+					if (ret >= 0)
 					{
-						StackPush(postFix, e);
-						e = StackPop(stack);
+						e = elements.data[ret];
 					}
+					else
+					{
+						e = ElementVariable(outstr, 0);
+						VectorInsert(elements, e, elementcmp);
 
+					}
+					StackPush(postFix, e);
+					index += advance;
 				}
 				else
 				{
-					if (proc == lhBracked) {
+					// if char is a process symbol
+
+
+					char c = buffer[index];
+					Process proc = CharToProc(c);
+					if (proc == undefined)
+					{
+						//abort the decoding proces
+						setColor(C_RED);
+						printf("! unable to solve funcion\n");
+						StackClear(postFix);
+						StackClear(stack);
+						break;
+					}
+					if (proc == rhBracked)
+					{
+						Element e = StackPop(stack);
+
+						while (!(e.type == Operator && e.proc == lhBracked) && !StackIsEmpty(stack))
+						{
+							StackPush(postFix, e);
+							e = StackPop(stack);
+						}
+
+						if (e.type == Operator && e.proc == lhBracked)
+						{
+							br--;
+
+						}
+						else
+							break;
+
 
 					}
 					else
-						while (StackTop(stack).type == Operator && proc < StackTop(stack).proc)
-						{
-							StackPush(postFix, StackPop(stack));
+					{
+						if (proc == lhBracked) {
+							br++;
 						}
-					StackPush(stack, ElementOperator(proc));
+						else
+							while (StackTop(stack).type == Operator && proc < StackTop(stack).proc)
+							{
+								StackPush(postFix, StackPop(stack));
+							}
+						StackPush(stack, ElementOperator(proc));
+					}
+
+					index++;
 				}
 
-				index++;
-			}
 
-
+	}
+	if (br != 0)
+	{
+		setColor(C_RED);
+		printf("! bracket error\n");
+		StackClear(postFix);
+		StackClear(stack);
 	}
 	while (!StackIsEmpty(stack))
 	{
@@ -568,20 +556,147 @@ int ParseFunction()
 		StackPush(postFix, popped);
 	}
 
+	return 1;
+}
 
-	// solver process
-	setColors(C_CYAN, CB_BLACK);
-	if (!StackIsEmpty(postFix))
+
+int isSolverInitialized = 0;
+void InitSolver()
+{
+	if (!isSolverInitialized)
 	{
+		StackInit(stack);
+		StackInit(postFix);
+		VectorInit(elements);
+		isSolverInitialized = 1;
+	}
+
+	
+}
+
+int SolverRoutine(char* strIn)
+{
+	InitSolver();
+	printWelcome();
+
+	CVectorChar bufferVec;
+	VectorInit(bufferVec);
+
+
+
+	if (strIn != 0)
+	{
+		setColors( C_BLUE,CB_WHITE);
+		printf("() Input accepted succesfully ()\n");
+		setColor(CB_BLACK);
+	char* delim = 	strtok(strIn, ";\n");
+		while (delim != 0)
+		{
+			setColor(C_YELLOW);
+			printf(">>> %s\n", delim);
+			StackClear(postFix);
+
+
+			int pRes = ParseFunction(delim);
+
 			float result;
-			int flag = SolveFunction(postFix , &result);
+			int flag = SolveFunction(postFix, &result);
 			if (flag == 1)
 			{
 				setColor(C_GREEN);
 				printf(" = %.2f\n", result);
 			}
-		
+
+			delim = strtok(0, ";\n");
+		}
+
+		int i;
+		for (i = 0; i < elements.size; i++)
+		{
+			printf(" ");
+			setColors(CB_MAGENTA, C_WHITE);
+			int elm = printf("{%s}", elements.data[i].var->name);
+			setColors(C_WHITE, CB_BLACK);
+			// some padding
+			while (20 - elm > 0) { elm++; printf("-"); }
+			printf("-> ");
+			setColor(C_GREEN);
+			printf("%.3f \n", elements.data[i].var->value);
+		}
 	}
+
+
+	while (1)
+	{
+
+		StackClear(postFix);
+		setColor(C_CYAN);
+		// get input string
+		VectorGetLine(&bufferVec, 255);
+
+		// here try to cath some functions such as clear and reset
+		if (strcmp(bufferVec.data, "clear") == 0)
+		{
+			clear();
+			continue;
+		}
+		else
+			if (strcmp(bufferVec.data, "reset") == 0)
+			{
+				VectorClear(elements);
+				continue;
+			}
+			else
+				if (strcmp(bufferVec.data, "show") == 0)
+				{
+					int i;
+					for (i = 0; i < elements.size; i++)
+					{
+						printf(" ");
+						setColors(CB_MAGENTA, C_WHITE);
+						int elm = printf("{%s}", elements.data[i].var->name);
+						setColors(C_WHITE, CB_BLACK);
+						// some padding
+						while (20 - elm > 0) { elm++; printf("-"); }
+						printf("-> ");
+						setColor(C_GREEN);
+						printf("%.3f \n", elements.data[i].var->value);
+					}
+
+					continue;
+				}
+				else
+					if (strcmp(bufferVec.data, "help") == 0)
+					{
+						printWelcome();
+						continue;
+					}
+					else
+						if (strcmp(bufferVec.data, "exit") == 0)
+						{
+						  exit(0);
+						}
+
+		// not necessary atm
+		// trim all spaces in input string
+		//VectorTrim(bufferVec, ' ');
+
+		int pRes = ParseFunction(bufferVec.data );
+
+
+		// solver process
+		setColors(C_CYAN, CB_BLACK);
+		if (!StackIsEmpty(postFix))
+		{
+			float result;
+			int flag = SolveFunction(postFix, &result);
+			if (flag == 1)
+			{
+				setColor(C_GREEN);
+				printf(" = %.2f\n", result);
+			}
+
+		}
 
 	}
 
