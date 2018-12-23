@@ -25,9 +25,20 @@ all you need to do write your vector data structure.
 after you can easily use all vector functions in your own defined data type
 
 ex:
+struct Foo
+{
+..
+}
+typedef Foo Foo; // here we need to define our struct as a new type in order to correctly run vectormaker...
 
-MyDaTaVector vec;
-VectorInit(vec);
+CVectorCreateType(Foo , MyFooVector);
+
+MyFooVector myVec = VectorCreate(myVec);
+OR
+MyFooVector myVec;
+VectorInit(myVec);
+
+... then
 
 YourDataType element;
 /*
